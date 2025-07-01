@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clovis North Card Club</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #2c2f38;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .btn-custom {
+      background-color: #0078d4;
+      color: white;
+    }
+    .btn-custom:hover {
+      background-color: #005bb5;
+    }
+    .btn-attendance {
+      background-color: #28a745;
+      color: white;
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn-attendance:hover {
+      background-color: #218838;
+    }
+    table {
+      background-color: #333;
+      border-radius: 5px;
+      padding: 15px;
+    }
+    th, td {
+      text-align: center;
+    }
+    .container {
+      margin-top: 50px;
+    }
+    .table-container {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    /* Modal styling improvements */
+    .modal-content {
+      background-color: #333;
+      color: white;
+    }
+    .modal-header {
+      background-color: #0078d4;
+      color: white;
+    }
+    .modal-title {
+      font-size: 1.25rem;
+    }
+    .modal-footer button {
+      background-color: #28a745;
+      color: white;
+    }
+    .modal-footer button:hover {
+      background-color: #218838;
+    }
+    .modal-body input, .modal-body select {
+      background-color: #444;
+      border: 1px solid #555;
+      color: white;
+    }
+    .modal-body label {
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="text-center my-4">Clovis North Card Club</h1>
+
+  <!-- Add Member Form -->
+  <div class="mb-3">
+    <label for="firstName" class="form-label">First Name</label>
+    <input type="text" id="firstName" class="form-control" placeholder="First Name">
+  </div>
+  <div class="mb-3">
+    <label for="lastName" class="form-label">Last Name</label>
+    <input type="text" id="lastName" class="form-control" placeholder="Last Name">
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" id="email" class="form-control" placeholder="Email">
+  </div>
+  <div class="mb-3">
+    <label for="role" class="form-label">Role</label>
+    <select id="role" class="form-select" onchange="onRoleChange()">
+      <option value="Advisor">Advisor</option>
+      <option value="President">President</option>
+      <option value="Vice President">Vice President</option>
+      <option value="Secretary">Secretary</option>
+      <option value="Treasurer">Treasurer</option>
+      <option value="Member">Member</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="grade" class="form-label">Grade</label>
+    <select id="grade" class="form-select">
+      <option value="">Select Grade</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+    </select>
+  </div>
+  <button id="addMember" class="btn btn-custom">Add Member</button>
+
+  <!-- Buttons container -->
+  <div class="d-flex justify-content-between mt-4">
+    <a href="attendance.html" class="btn btn-custom">Attendance</a>
+  </div>
+
+  <!-- Tabs for Staff and Members -->
+  <h2 class="my-4">Members List</h2>
+  <div class="table-container">
+    <div class="nav nav-pills" id="pills-tab" role="tablist">
+      <a class="nav-link active" id="pills-staff-tab" data-bs-toggle="pill" href="#pills-staff" role="tab" aria-controls="pills-staff" aria-selected="true">Staff</a>
+      <a class="nav-link" id="pills-members-tab" data-bs-toggle="pill" href="#pills-members" role="tab" aria-controls="pills-members" aria-selected="false">Members</a>
+    </div>
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade show active" id="pills-staff" role="tabpanel" aria-labelledby="pills-staff-tab">
+        <table class="table table-dark table-striped">
+          <thead>
+            <tr>
+              <th scope="col">First Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Grade</th>
+              <th scope="col">Role</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="staffList">
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane fade" id="pills-members" role="tabpanel" aria-labelledby="pills-members-tab">
+        <table class="table table-dark table-striped">
+          <thead>
+            <tr>
+              <th scope="col">First Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Grade</th>
+              <th scope="col">Role</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="membersList">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Edit Member Modal -->
+<div class="modal fade" id="editMemberModal" tabindex="-1" aria-labelledby="editMemberModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editMemberModalLabel">Edit Member</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="editFirstName" class="form-label">First Name</label>
+          <input type="text" id="editFirstName" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="editLastName" class="form-label">Last Name</label>
+          <input type="text" id="editLastName" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="editEmail" class="form-label">Email</label>
+          <input type="email" id="editEmail" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="editRole" class="form-label">Role</label>
+          <select id="editRole" class="form-select">
+            <option value="Advisor">Advisor</option>
+            <option value="President">President</option>
+            <option value="Vice President">Vice President</option>
+            <option value="Secretary">Secretary</option>
+            <option value="Treasurer">Treasurer</option>
+            <option value="Member">Member</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="editGrade" class="form-label">Grade</label>
+          <select id="editGrade" class="form-select">
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveEditMember">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let members = JSON.parse(localStorage.getItem('members')) || [];
+
+  const addMemberButton = document.getElementById('addMember');
+  const staffList = document.getElementById('staffList');
+  const membersList = document.getElementById('membersList');
+  const firstNameInput = document.getElementById('firstName');
+  const lastNameInput = document.getElementById('lastName');
+  const emailInput = document.getElementById('email');
+  const gradeInput = document.getElementById('grade');
+  const roleInput = document.getElementById('role');
+  const editGradeInput = document.getElementById('editGrade');
+  const editRoleInput = document.getElementById('editRole');
+
+  const roleHierarchy = [
+    "Advisor",       // Top priority
+    "President",     // Second priority
+    "Vice President", // Third priority
+    "Secretary",     // Fourth priority
+    "Treasurer",     // Fifth priority
+    "Member"         // Last priority
+  ];
+
+  // Function to update Grade visibility based on role selection
+  function toggleGradeVisibility(role) {
+    if (role === "Advisor") {
+      gradeInput.setAttribute("disabled", true);
+      gradeInput.value = "";  // Blank when Advisor
+    } else {
+      gradeInput.removeAttribute("disabled");
+      gradeInput.value = "9";  // Default to grade 9
+    }
+  }
+
+  function toggleEditGradeVisibility(role) {
+    if (role === "Advisor") {
+      editGradeInput.setAttribute("disabled", true);
+      editGradeInput.value = "";  // Blank when Advisor
+    } else {
+      editGradeInput.removeAttribute("disabled");
+    }
+  }
+
+  function updateMemberList() {
+    staffList.innerHTML = '';
+    membersList.innerHTML = '';
+    
+    // Sort members by role hierarchy and first name alphabetically
+    members.sort((a, b) => {
+      const roleIndexA = roleHierarchy.indexOf(a.role);
+      const roleIndexB = roleHierarchy.indexOf(b.role);
+      
+      if (roleIndexA !== roleIndexB) {
+        return roleIndexA - roleIndexB;  // Sort by role hierarchy
+      }
+
+      // If roles are the same, sort alphabetically by first name
+      return a.firstName.localeCompare(b.firstName);
+    });
+
+    members.forEach((member, index) => {
+      const rowHTML = `
+        <tr>
+          <td>${member.firstName}</td>
+          <td>${member.lastName}</td>
+          <td>${member.email}</td>
+          <td>${member.grade}</td>
+          <td>${member.role}</td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="editMember(${index})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="removeMember(${index})">Remove</button>
+          </td>
+        </tr>
+      `;
+      if (member.role === 'Advisor' || member.role === 'President' || member.role === 'Vice President' || member.role === 'Secretary' || member.role === 'Treasurer') {
+        staffList.insertAdjacentHTML('beforeend', rowHTML);
+      } else {
+        membersList.insertAdjacentHTML('beforeend', rowHTML);
+      }
+    });
+
+    // Save to localStorage after updating
+    localStorage.setItem('members', JSON.stringify(members));
+  }
+
+  // Initialize form behavior for new member
+  roleInput.addEventListener('change', () => {
+    toggleGradeVisibility(roleInput.value);
+  });
+
+  // Handle member addition
+  addMemberButton.addEventListener('click', function() {
+    const firstName = firstNameInput.value.trim();
+    const lastName = lastNameInput.value.trim();
+    const email = emailInput.value.trim();
+    const grade = gradeInput.value;
+    const role = roleInput.value;
+
+    if (!firstName || !lastName || !email || !role) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    members.push({ firstName, lastName, email, grade, role });
+    firstNameInput.value = '';
+    lastNameInput.value = '';
+    emailInput.value = '';
+    gradeInput.value = '';
+    roleInput.value = 'Member';
+
+    updateMemberList();
+  });
+
+  // Remove member
+  function removeMember(index) {
+    const confirmRemoval = confirm("Are you sure you want to remove this member?");
+    if (confirmRemoval) {
+      members.splice(index, 1);
+      updateMemberList();
+    }
+  }
+
+  // Edit member functionality
+  function editMember(index) {
+    const member = members[index];
+    document.getElementById('editFirstName').value = member.firstName;
+    document.getElementById('editLastName').value = member.lastName;
+    document.getElementById('editEmail').value = member.email;
+    editRoleInput.value = member.role;
+    editGradeInput.value = member.grade;
+
+    // Handle the visibility of the grade dropdown in edit modal
+    toggleEditGradeVisibility(member.role);
+
+    // Show modal for editing
+    const editMemberModal = new bootstrap.Modal(document.getElementById('editMemberModal'));
+    editMemberModal.show();
+
+    const saveEditButton = document.getElementById('saveEditMember');
+    saveEditButton.onclick = function() {
+      member.firstName = document.getElementById('editFirstName').value;
+      member.lastName = document.getElementById('editLastName').value;
+      member.email = document.getElementById('editEmail').value;
+      member.role = editRoleInput.value;
+      member.grade = editGradeInput.value;
+
+      updateMemberList();
+      editMemberModal.hide();
+    };
+  }
+
+  // Initialize member list
+  updateMemberList();
+</script>
+
+</body>
+</html>
