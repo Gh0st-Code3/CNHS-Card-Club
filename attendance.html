@@ -102,13 +102,39 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Retrieve members from localStorage
-  let members = JSON.parse(localStorage.getItem("members")) || [];
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+  import { getDatabase, ref, set, push, get, child, remove, update } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+  import { ref as dbRef } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBe1-tNFIWeW5AoVi3XfVgZDOATW_3Shzg",
+    authDomain: "cnhs-card-club.firebaseapp.com",
+    databaseURL: "https://cnhs-card-club-default-rtdb.firebaseio.com",
+    projectId: "cnhs-card-club",
+    storageBucket: "cnhs-card-club.firebasestorage.app",
+    messagingSenderId: "1009740758724",
+    appId: "1:1009740758724:web:34c28db4ac5fd0ac7ad391",
+    measurementId: "G-246LDHJXGZ"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const database = getDatabase(app);
+  const membersRef = ref(database, "members");
+  const attendanceRef = ref(database, "attendance");
+  console.log("attendanceRef:", attendanceRef);
 
   const attendanceList = document.getElementById("attendanceList");
 
-  function generateAttendanceList() {
+  function generateAttendanceList(members) {
     attendanceList.innerHTML = '';
     members.forEach((member, index) => {
       const rowHTML = `
@@ -117,7 +143,7 @@
           <td>${member.lastName}</td>
           <td>${member.role}</td>
           <td>
-            <input type="checkbox" class="attendance-checkbox" data-index="${index}" id="attendance-${index}">
+            <input type="checkbox" class="attendance-checkbox" data-id="${member.id}" id="attendance-${index}">
           </td>
         </tr>
       `;
@@ -125,29 +151,49 @@
     });
   }
 
-  document.getElementById("saveAttendance").addEventListener("click", function() {
+  // Load members from Firebase
+  get(membersRef).then(snapshot => {
+    const data = snapshot.val() || {};
+    const memberArray = [];
+
+    for (let key in data) {
+      memberArray.push({ ...data[key], id: key });
+    }
+
+    generateAttendanceList(memberArray);
+  });
+
+  document.getElementById("saveAttendance").addEventListener("click", function () {
     const attendanceData = [];
-    const date = new Date().toISOString().split("T")[0]; // e.g., 2025-07-01
+    const date = new Date().toISOString().split("T")[0];
 
     document.querySelectorAll('.attendance-checkbox').forEach((checkbox) => {
       const isChecked = checkbox.checked;
-      const index = checkbox.getAttribute('data-index');
-      const member = members[index];
-      attendanceData.push({
-        name: `${member.firstName} ${member.lastName}`,
-        role: member.role,
+      const memberId = checkbox.getAttribute('data-id');
+      const row = checkbox.closest('tr');
+      const name = row.children[0].textContent + " " + row.children[1].textContent;
+      const role = row.children[2].textContent;
+
+      const record = {
+        memberId: memberId,
+        name: name,
+        role: role,
         present: isChecked ? "Yes" : "No",
         date: date
-      });
+      };
+
+      attendanceData.push(record);
+
+      push(attendanceRef, record);
+
     });
 
-    // Convert to CSV
+    // CSV download
     let csvContent = "Name,Role,Present,Date\n";
     attendanceData.forEach(row => {
       csvContent += `${row.name},${row.role},${row.present},${row.date}\n`;
     });
 
-    // Trigger download
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -157,16 +203,13 @@
     link.click();
     document.body.removeChild(link);
 
-    // ✅ Reset checkboxes
+    // Clear checkboxes
     document.querySelectorAll('.attendance-checkbox').forEach(cb => cb.checked = false);
 
-    // ✅ Show custom success modal
+    // Show success modal
     const modal = new bootstrap.Modal(document.getElementById('successModal'));
     modal.show();
   });
-
-  // Initialize attendance page
-  generateAttendanceList();
 </script>
 
 </body>
