@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clovis North Card Club</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join Clovis North Card Club</title>
+  <link rel="icon" type="image/png" href="bronco-favicon.png" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
       background-color: #2c2f38;
@@ -18,32 +19,9 @@
     .btn-custom:hover {
       background-color: #005bb5;
     }
-    .btn-attendance {
-      background-color: #28a745;
-      color: white;
-      font-size: 18px;
-      padding: 10px 20px;
-      border-radius: 5px;
-      text-decoration: none;
-      text-align: center;
-    }
-    .btn-attendance:hover {
-      background-color: #218838;
-    }
-    table {
-      background-color: #333;
-      border-radius: 5px;
-      padding: 15px;
-    }
-    th, td {
-      text-align: center;
-    }
     .container {
-      margin-top: 50px;
-    }
-    .table-container {
-      max-height: 300px;
-      overflow-y: auto;
+      margin-top: 60px;
+      max-width: 500px;
     }
     .modal-content {
       background-color: #333;
@@ -51,59 +29,35 @@
     }
     .modal-header {
       background-color: #0078d4;
-      color: white;
     }
-    .modal-title {
-      font-size: 1.25rem;
-    }
-    .modal-footer button {
-      background-color: #28a745;
-      color: white;
-    }
-    .modal-footer button:hover {
-      background-color: #218838;
-    }
-    .modal-body input, .modal-body select {
+    input, select {
       background-color: #444;
-      border: 1px solid #555;
       color: white;
-    }
-    .modal-body label {
-      color: #ccc;
+      border: 1px solid #555;
     }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1 class="text-center my-4">Clovis North Card Club</h1>
-
-  <!-- Add Member Form -->
+  <div class="text-center mb-4">
+  <img src="bronco-logo.png" alt="Clovis North Logo" style="height: 60px; margin-bottom: 10px;">
+  <h2>Join Clovis North Card Club</h2>
+  </div>
   <div class="mb-3">
     <label for="firstName" class="form-label">First Name</label>
-    <input type="text" id="firstName" class="form-control" placeholder="First Name" />
+    <input type="text" class="form-control" id="firstName">
   </div>
   <div class="mb-3">
     <label for="lastName" class="form-label">Last Name</label>
-    <input type="text" id="lastName" class="form-control" placeholder="Last Name" />
+    <input type="text" class="form-control" id="lastName">
   </div>
   <div class="mb-3">
     <label for="email" class="form-label">Email</label>
     <input type="email" id="email" class="form-control" placeholder="Email" />
   </div>
   <div class="mb-3">
-    <label for="role" class="form-label">Role</label>
-    <select id="role" class="form-select" onchange="onRoleChange()">
-      <option value="Advisor">Advisor</option>
-      <option value="President">President</option>
-      <option value="Vice President">Vice President</option>
-      <option value="Secretary">Secretary</option>
-      <option value="Treasurer">Treasurer</option>
-      <option value="Member">Member</option>
-    </select>
-  </div>
-  <div class="mb-3">
     <label for="grade" class="form-label">Grade</label>
-    <select id="grade" class="form-select">
+    <select class="form-select" id="grade">
       <option value="">Select Grade</option>
       <option value="9">9</option>
       <option value="10">10</option>
@@ -111,121 +65,37 @@
       <option value="12">12</option>
     </select>
   </div>
-  <button id="addMember" class="btn btn-custom">Add Member</button>
-
-  <!-- Buttons container -->
-  <div class="d-flex justify-content-between mt-4">
-    <a href="attendance.html" class="btn btn-custom">Attendance</a>
-  </div>
-
-  <!-- Tabs -->
-  <h2 class="my-4">Members List</h2>
-  <div class="table-container">
-    <div class="nav nav-pills" id="pills-tab" role="tablist">
-      <a class="nav-link active" id="pills-staff-tab" data-bs-toggle="pill" href="#pills-staff" role="tab">Staff</a>
-      <a class="nav-link" id="pills-members-tab" data-bs-toggle="pill" href="#pills-members" role="tab">Members</a>
-    </div>
-    <div class="tab-content" id="pills-tabContent">
-      <div class="tab-pane fade show active" id="pills-staff" role="tabpanel">
-        <table class="table table-dark table-striped">
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Grade</th>
-              <th>Role</th>
-              <th>Date Added</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="staffList"></tbody>
-        </table>
-      </div>
-      <div class="tab-pane fade" id="pills-members" role="tabpanel">
-        <table class="table table-dark table-striped">
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Grade</th>
-              <th>Role</th>
-              <th>Date Added</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="membersList"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+  
+  <button id="submitSignup" class="btn btn-custom w-100">Sign Up</button>
+  <hr />
+  <button class="btn btn-outline-light w-100 mt-2" data-bs-toggle="modal" data-bs-target="#adminLoginModal">Admin Login</button>
 </div>
 
-<!-- Edit Member Modal -->
-<div class="modal fade" id="editMemberModal" tabindex="-1" aria-labelledby="editMemberModalLabel" aria-hidden="true">
+<!-- Admin Login Modal -->
+<div class="modal fade" id="adminLoginModal" tabindex="-1" aria-labelledby="adminLoginModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Edit Member</h5>
+        <h5 class="modal-title">Admin Login</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div class="mb-3">
-          <label for="editFirstName" class="form-label">First Name</label>
-          <input type="text" id="editFirstName" class="form-control" />
-        </div>
-        <div class="mb-3">
-          <label for="editLastName" class="form-label">Last Name</label>
-          <input type="text" id="editLastName" class="form-control" />
-        </div>
-        <div class="mb-3">
-          <label for="editEmail" class="form-label">Email</label>
-          <input type="email" id="editEmail" class="form-control" />
-        </div>
-        <div class="mb-3">
-          <label for="editRole" class="form-label">Role</label>
-          <select id="editRole" class="form-select">
-            <option value="Advisor">Advisor</option>
-            <option value="President">President</option>
-            <option value="Vice President">Vice President</option>
-            <option value="Secretary">Secretary</option>
-            <option value="Treasurer">Treasurer</option>
-            <option value="Member">Member</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="editGrade" class="form-label">Grade</label>
-          <select id="editGrade" class="form-select">
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-          </select>
-        </div>
+        <label for="adminPassword" class="form-label">Enter Admin Password:</label>
+        <input type="password" class="form-control" id="adminPassword">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveEditMember">Save changes</button>
+        <button class="btn btn-success" id="loginAdmin">Login</button>
       </div>
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Firebase SDKs -->
 <script type="module">
-  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
-  import { getDatabase, ref, set, push, get, child, remove, update } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-  import { ref as dbRef } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
     apiKey: "AIzaSyBe1-tNFIWeW5AoVi3XfVgZDOATW_3Shzg",
     authDomain: "cnhs-card-club.firebaseapp.com",
@@ -233,106 +103,22 @@
     projectId: "cnhs-card-club",
     storageBucket: "cnhs-card-club.firebasestorage.app",
     messagingSenderId: "1009740758724",
-    appId: "1:1009740758724:web:34c28db4ac5fd0ac7ad391",
-    measurementId: "G-246LDHJXGZ"
+    appId: "1:1009740758724:web:34c28db4ac5fd0ac7ad391"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
   const database = getDatabase(app);
   const membersRef = ref(database, "members");
 
-  const addMemberButton = document.getElementById('addMember');
-  const staffList = document.getElementById('staffList');
-  const membersList = document.getElementById('membersList');
-  const firstNameInput = document.getElementById('firstName');
-  const lastNameInput = document.getElementById('lastName');
-  const emailInput = document.getElementById('email');
-  const gradeInput = document.getElementById('grade');
-  const roleInput = document.getElementById('role');
-  const editGradeInput = document.getElementById('editGrade');
-  const editRoleInput = document.getElementById('editRole');
+  document.getElementById("submitSignup").addEventListener("click", () => {
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const grade = document.getElementById("grade").value;
+    const role = "Member";
 
-  const roleHierarchy = [
-    "Advisor", "President", "Vice President",
-    "Secretary", "Treasurer", "Member"
-  ];
-
-  function toggleGradeVisibility(role) {
-    if (role === "Advisor") {
-      gradeInput.setAttribute("disabled", true);
-      gradeInput.value = "";
-    } else {
-      gradeInput.removeAttribute("disabled");
-      gradeInput.value = "9";
-    }
-  }
-
-  function toggleEditGradeVisibility(role) {
-    if (role === "Advisor") {
-      editGradeInput.setAttribute("disabled", true);
-      editGradeInput.value = "";
-    } else {
-      editGradeInput.removeAttribute("disabled");
-    }
-  }
-
-  function updateMemberList() {
-    staffList.innerHTML = '';
-    membersList.innerHTML = '';
-
-    get(membersRef).then(snapshot => {
-        console.log("Database snapshot:", snapshot.val());
-      const data = snapshot.val();
-      const membersArray = [];
-
-      for (let key in data) {
-        membersArray.push({ ...data[key], id: key });
-      }
-
-      membersArray.sort((a, b) => {
-        const aIndex = roleHierarchy.indexOf(a.role);
-        const bIndex = roleHierarchy.indexOf(b.role);
-        return aIndex !== bIndex ? aIndex - bIndex : a.firstName.localeCompare(b.firstName);
-      });
-
-      membersArray.forEach((member, index) => {
-        const rowHTML = `
-          <tr>
-            <td>${member.firstName}</td>
-            <td>${member.lastName}</td>
-            <td>${member.email}</td>
-            <td>${member.grade}</td>
-            <td>${member.role}</td>
-            <td>${member.dateAdded || '—'}</td>
-            <td>
-              <button class="btn btn-warning btn-sm" onclick="editMember('${member.id}')">Edit</button>
-              <button class="btn btn-danger btn-sm" onclick="removeMember('${member.id}')">Remove</button>
-            </td>
-          </tr>
-        `;
-        const list = ['Advisor', 'President', 'Vice President', 'Secretary', 'Treasurer'].includes(member.role)
-          ? staffList
-          : membersList;
-        list.insertAdjacentHTML('beforeend', rowHTML);
-      });
-    });
-  }
-
-  roleInput.addEventListener('change', () => {
-    toggleGradeVisibility(roleInput.value);
-  });
-
-  addMemberButton.addEventListener('click', function () {
-    const firstName = firstNameInput.value.trim();
-    const lastName = lastNameInput.value.trim();
-    const email = emailInput.value.trim();
-    const grade = gradeInput.value;
-    const role = roleInput.value;
-
-    if (!firstName || !lastName || !email || !role) {
-      alert("Please fill out all fields.");
+    if (!firstName || !lastName || !email || !grade) {
+      alert("Please fill in all required fields.");
       return;
     }
 
@@ -340,66 +126,24 @@
     const newMember = { firstName, lastName, email, grade, role, dateAdded };
 
     push(membersRef, newMember).then(() => {
-      firstNameInput.value = '';
-      lastNameInput.value = '';
-      emailInput.value = '';
-      gradeInput.value = '';
-      roleInput.value = 'Member';
-      updateMemberList();
-    });
-
-    console.log("Adding member:", newMember);
+    alert("Thank you for signing up!");
+    document.getElementById("firstName").value = "";
+    document.getElementById("lastName").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("grade").value = "";
+  }).catch(error => {
+    alert("Signup failed: " + error.message);
   });
+});
 
-  function removeMember(memberId) {
-    if (confirm("Are you sure you want to remove this member?")) {
-    const memberRef = dbRef(database, `members/${memberId}`);
-    remove(memberRef).then(() => {
-      updateMemberList();
-      });
+  document.getElementById("loginAdmin").addEventListener("click", () => {
+    const password = document.getElementById("adminPassword").value;
+    if (password === "cardclub2025") {
+      window.location.href = "database.html"; // or "attendance.html" if you want to go there
+    } else {
+      alert("Incorrect password.");
     }
-  }
-
-  function editMember(memberId) {
-  const memberRef = dbRef(database, `members/${memberId}`);
-
-  get(memberRef).then(snapshot => {
-    const member = snapshot.val();
-
-    document.getElementById('editFirstName').value = member.firstName;
-    document.getElementById('editLastName').value = member.lastName;
-    document.getElementById('editEmail').value = member.email;
-    editRoleInput.value = member.role;
-    editGradeInput.value = member.grade;
-    toggleEditGradeVisibility(member.role);
-
-    const modal = new bootstrap.Modal(document.getElementById('editMemberModal'));
-    modal.show();
-
-    document.getElementById('saveEditMember').onclick = function () {
-      const updatedMember = {
-        firstName: document.getElementById('editFirstName').value,
-        lastName: document.getElementById('editLastName').value,
-        email: document.getElementById('editEmail').value,
-        role: editRoleInput.value,
-        grade: editGradeInput.value,
-        dateAdded: member.dateAdded
-      };
-
-      update(memberRef, updatedMember).then(() => {
-        modal.hide();
-        updateMemberList();
-      });
-    };
   });
-}
-
-window.updateMemberList = updateMemberList;
-window.removeMember = removeMember;
-window.editMember = editMember;
-
-window.onload = updateMemberList;
 </script>
-
 </body>
 </html>
